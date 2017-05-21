@@ -1,3 +1,4 @@
+import os
 import time
 
 import pandas as pd
@@ -8,7 +9,7 @@ from sklearn.metrics.pairwise import linear_kernel
 
 class Recommender(object):
     SIMKEY = "p:smlr:%s"
-    REDIS_URL = "redis://localhost:6379"
+    REDIS_URL = os.environ.get("REDIS_URL") or "redis://localhost:6379"
 
     def __init__(self):
         self._redis = redis.StrictRedis.from_url(self.REDIS_URL)
