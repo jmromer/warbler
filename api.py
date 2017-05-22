@@ -36,6 +36,4 @@ api.add_resource(Recommendation, "/recommendation")
 
 @app.route("/")
 def index():
-    result = subprocess.run(["fortune"], stdout=subprocess.PIPE)
-    fortune = result.stdout.decode("utf-8")
-    return fortune.replace("\n", "<br>")
+    return "🐦 🐤"
