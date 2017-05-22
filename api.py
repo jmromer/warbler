@@ -16,14 +16,17 @@ class Recommendation(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument("squawk_id", type=int, required=True)
+        parser.add_argument("num_recs", type=int)
+
         args = parser.parse_args()
-        item_id = args['squawk_id']
-        num_recommendations = 5
+        item_id = args["squawk_id"]
+        num_recs = args["num_recs"] or 5
 
         recommender = Recommender()
-        prediction = recommender.predict(item_id, num_recommendations)
-        ids = list(map(lambda b: int(b.decode("utf-8")), prediction))
-        return {"squawk_ids": ids}
+        prediction = recommender.predict(item_id, num_recs)
+
+        print("Returning ids: %s" % prediction)
+        return {"squawk_ids": prediction}
 
 
 api.add_resource(Recommendation, "/recommendation")
