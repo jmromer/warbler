@@ -18,13 +18,16 @@ class Recommender(object):
         start = time.time()
         df = pd.read_csv(csv_path)
         print("Loading data: %s secs." % (time.time() - start))
+
         start = time.time()
         self._train_engine(df)
         print("Training model: %s secs." % (time.time() - start))
 
     def predict(self, item_id, num):
-        return self._redis.zrange(
+        prediction = self._redis.zrange(
             self.SIMKEY % item_id, 0, num - 1, withscores=False, desc=True)
+        ids = list(map(lambda b: int(b.decode("utf-8")), prediction))
+        return ids
 
     def _train_engine(self, data_frame):
         tf = TfidfVectorizer(
