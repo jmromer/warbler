@@ -1,3 +1,5 @@
+import subprocess
+
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 
@@ -31,5 +33,9 @@ class Recommendation(Resource):
 
 api.add_resource(Recommendation, "/recommendation")
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+@app.route("/")
+def index():
+    result = subprocess.run(["fortune"], stdout=subprocess.PIPE)
+    fortune = result.stdout.decode("utf-8")
+    return fortune.replace("\n", "<br>")
