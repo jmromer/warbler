@@ -6,22 +6,30 @@ import redis
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
+import sqlalchemy as sql
+
 
 class Recommender(object):
     SIMKEY = "p:smlr:%s"
     REDIS_URL = os.environ.get("REDIS_URL") or "redis://localhost:6379"
+    DB_URL = os.environ.get("DB_URL") or \
+        "postgresql://postgres:@localhost/squawker_development"
 
     def __init__(self):
         self._redis = redis.StrictRedis.from_url(self.REDIS_URL)
+        self._db_engine = sql.create_engine(
+            self.DB_URL, isolation_level="READ UNCOMMITTED")
 
-    def train(self, csv_path):
-        start = time.time()
-        df = pd.read_csv(csv_path)
-        print("Loading data: %s secs." % (time.time() - start))
+    def train(self):
+        with self._db_engine.connect() as conn:
+            start = time.time()
+            df = pd.read_sql_table("squawks", conn)
+            print("Loaded data: %s secs." % (time.time() - start))
 
-        start = time.time()
-        self._train_engine(df)
-        print("Training model: %s secs." % (time.time() - start))
+            # train rec engine
+            start = time.time()
+            self._train_engine(df)
+            print("Training model: %s secs." % (time.time() - start))
 
     def predict(self, item_id, num):
         prediction = self._redis.zrange(

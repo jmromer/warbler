@@ -1,7 +1,9 @@
 aniso8601==1.2.1
 click==6.7
+enum34==1.1.6
 Flask==0.12.2
 Flask-RESTful==0.3.5
+grizzled-python==1.0.7
 gunicorn==19.7.1
 itsdangerous==0.24
 Jinja2==2.9.6
@@ -9,6 +11,7 @@ MarkupSafe==1.0
 newrelic==2.86.1.66
 numpy==1.12.1
 pandas==0.20.1
+psycopg2==2.7.3
 python-dateutil==2.6.0
 pytz==2017.2
 redis==2.10.5
@@ -16,4 +19,5 @@ scikit-learn==0.18.1
 scipy==0.19.0
 six==1.10.0
 sklearn==0.0
+SQLAlchemy==1.1.12
 Werkzeug==0.12.2

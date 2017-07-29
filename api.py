@@ -12,7 +12,7 @@ api = Api(app)
 class Recommendation(Resource):
     def put(self):
         recommender = Recommender()
-        recommender.train("./data/squawks.csv")
+        recommender.train()
         return {"success": True}
 
     def get(self):
